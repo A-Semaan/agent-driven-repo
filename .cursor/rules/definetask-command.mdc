@@ -1,0 +1,51 @@
+---
+description: Handle /definetask command to define tasks within phases
+globs: 
+alwaysApply: true
+---
+
+# /definetask Command
+
+Defines one or more tasks within a phase in `docs/phases/`.
+
+## Trigger
+
+User message starts with `/definetask` with a phase reference and task context.
+
+## Execution Steps
+
+1. **Invoke `roadmap-context` skill**
+   - Read the current roadmap
+   - Gather phase-specific context
+
+2. **Invoke `context-gathering` skill**
+   - Read additional relevant files
+   - Read additional relevant documentation
+
+3. **Invoke `dependency-check` skill**
+   - Identify task dependencies
+   - Validate dependency declarations
+
+4. **Analyze scope**
+   - Identify ambiguities or missing information
+   - Surface ambiguities to user if any exist
+   - Wait for clarification — do NOT proceed until resolved
+
+5. **Define task(s)**
+   - Invoke `task-definition` skill
+   - Create task file(s) in `docs/phases/phase[x]-<date>/`
+   - Follow naming: `<ordinal>-<task-name>.md`
+
+## Phase Directory
+
+Tasks go in: `docs/phases/phase[N]-<yyyy-MM-dd>/`
+
+Create the phase directory if it doesn't exist.
+
+## Rules
+
+- NEVER define tasks without reading the roadmap first
+- NEVER proceed with ambiguous requirements
+- NEVER skip dependency validation
+- ALWAYS include complete task specification per `task-definition` skill
+- ALWAYS verify task boundaries are explicit

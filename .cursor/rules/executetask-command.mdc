@@ -1,0 +1,56 @@
+---
+description: Handle /executetask command to execute defined tasks
+globs: 
+alwaysApply: true
+---
+
+# /executetask Command
+
+Executes a task strictly following its task file.
+
+## Trigger
+
+User message starts with `/executetask` followed by task name.
+
+## Execution Steps
+
+1. **Locate and read the task file**
+   - Find task in `docs/phases/`
+   - Verify status is `defined`
+
+2. **Invoke `roadmap-context` skill**
+   - Gather current roadmap context
+
+3. **Invoke `context-gathering` skill**
+   - Read files specified in task's Context section
+
+4. **Invoke `dependency-check` skill**
+   - Verify ALL dependencies are `executed`
+   - HALT if any dependency is not satisfied
+
+5. **Pre-execution check**
+   - List EVERY file that will be created, modified, or deleted
+   - Present list to user
+   - Wait for explicit confirmation before proceeding
+
+6. **Create git branch**
+   - Branch name: task name (hyphenated)
+   - Example: `01-setup-database`
+
+7. **Execute the task**
+   - Follow the To Do checklist exactly
+   - Follow the Execution Plan exactly
+   - Do NOT perform any action not in the task file
+
+8. **Monitor boundaries**
+   - If any boundary would be violated, HALT immediately
+   - Surface the issue to user
+
+## Rules
+
+- NEVER execute without dependency check passing
+- NEVER execute without user confirmation of file changes
+- NEVER modify files not listed in the task
+- NEVER perform actions outside the execution plan
+- HALT immediately if boundaries would be violated
+- ALWAYS create a dedicated branch for the task

@@ -1,0 +1,52 @@
+---
+description: Handle /committask command to finalize and commit task changes
+globs: 
+alwaysApply: true
+---
+
+# /committask Command
+
+Updates task status to `executed`, commits changes, and returns to parent branch.
+
+## Trigger
+
+User message starts with `/committask`.
+
+## Execution Steps
+
+1. **Invoke `documentation-sync` skill**
+   - Review all files touched during task
+   - Ensure documentation is up to date
+   - Create stubs for undocumented behavior
+
+2. **Update task file**
+   - Change `Status` from `defined` to `executed`
+   - This is the ONLY change to the task file
+
+3. **Commit all changes**
+   - Stage all modified files
+   - Commit message format: `task: [task-name] (GUID)`
+   - Example: `task: 01-setup-database (a1b2c3d4-...)`
+
+4. **Switch to parent branch**
+   - Return to the branch from which the task branch was created
+   - Typically `main` or a feature branch
+
+## Commit Message Format
+
+```
+task: [task-name] ([GUID])
+
+[Brief summary of what was accomplished]
+
+Files changed:
+- [list of files]
+```
+
+## Rules
+
+- NEVER commit without running documentation-sync
+- NEVER commit if documentation is out of sync
+- NEVER modify task file content other than status
+- ALWAYS include GUID in commit message
+- ALWAYS return to parent branch after commit
